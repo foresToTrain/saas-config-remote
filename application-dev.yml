@@ -1,0 +1,92 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: micro-comment
+  http:
+    multipart:
+      max-file-size: 10Mb
+      max-request-size: 100Mb
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+  session:
+      store-type: redis
+mybatis:
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  type-aliases-package: com.inclution
+  type-handlers-package: com.inclution
+  config-location: classpath:mybatis-config.xml
+libPermissionAop:
+  enable: false
+logging:
+  level: debug
+  config: classpath:logback-boot.xml
+server:
+  port: 8780
+  tomcat:
+    uri-encoding: UTF-8
+eureka:
+  discoverer:
+    port: 8761
+saas:
+  rocketmq:
+    namesrvAddr: localhost:9876
+    #instanceName:
+    #clientIP:
+    #producer:
+    consumer:
+      subscribe: topic-sys:tx-unique-key,topic-user:allot-to-counselor,topic-crm:auto-create-clue
+---
+spring:
+  profiles: dev
+  zipkin:
+    base-url: http://localhost:9411
+    enabled: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://10.10.5.97:3306/cloud_comment?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
+    username: root
+    password: root
+  redis:
+    host: 10.10.5.97
+    port: 6379
+    pool:
+      max-idle: 8
+      min-idle: 0
+  data:
+    mongodb:
+      uri: mongodb://10.10.5.97:27017/anydata
+oss:
+  endpoint: oss-cn-hangzhou.aliyuncs.com
+  accessKeyId: LTAIivmFxxZlQdEN
+  accessKeySecret: sly1UykjVdxfTk87dBWK5JtaaDlgWG
+  bucketName: yunpizhu-test1
+  accessDomain: oss-cn-hangzhou.aliyuncs.com
+  accessScheme: https
+entity2database:
+  catalog: phboss
+  schema: root
+  enableDelete: false
+paas:
+  enableRpc: true
+  enableRocketmq: false
+  saas-api-url: http://localhost:8759
+  enableTest: false
+  mockLogin: false
+  filePath: /data/appBoss/upload
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+  client:
+    service-url:
+      register-with-eureka: true
+      fetch-registry: true
+      default-zone: http://${eureka.instance.hostname}:${server.discoverer.port}/eureka/
